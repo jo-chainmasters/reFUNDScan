@@ -136,7 +136,7 @@ func Connect(resp chan string, restart chan bool) {
                         mkBold("\n♻️ REStake ♻️") +
                         mkBold("\n\nValidator: \n") +
                         mkAccountLink(events.WithdrawRewardsValidator[0]) +
-                        mkBold("\nDelegators:")
+                        mkBold("\n\nDelegators:")
                     j := 0
                     var total string
                     totaler := denomsToAmount()
