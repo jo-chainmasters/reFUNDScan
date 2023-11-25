@@ -137,7 +137,27 @@ func getAccountName(msg string) string {
     return fmt.Sprintf("%s...%s",msg[:7],msg[len(msg)-7:])
 }
 
+func denomsToAmount() func(string) string{
+    var total float64
+    return func(msg string) string {
+        var amount string
+        var denom string
 
+        switch msg[len(msg)-4:] {
+        case "nund":
+            denom = "nund"
+            amount = msg[:len(msg)-4]
+        default:
+            // Other IBC denoms such as ibc/xxxx
+            // IBC denom hash is always 64 chars + 4 chars for the ibc/
+            denom = msg[len(msg)-68:]
+            amount = msg[:len(msg)-68]
+        }
+        numericalAmount, _ := strconv.ParseFloat(amount, 64)
+        total += numericalAmount
+        return fmt.Sprintf("%f%s",total,denom)
+    }
+}
 
 // Converts the denom to the formatted amount
 // E.G. 1000000000nund becomes 1.00 FUND

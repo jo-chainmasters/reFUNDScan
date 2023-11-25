@@ -138,16 +138,23 @@ func Connect(resp chan string, restart chan bool) {
                         mkAccountLink(events.WithdrawRewardsValidator[0]) +
                         mkBold("\nDelegators: \n")
                     j := 0
+                    total := ""
+                    totaler := denomsToAmount()
                     for i, delegator := range events.MessageSender {
                         if i >= 2 {
                             if i % 2 == 0 {
                                 j += 1
                                 msg += fmt.Sprintf("\n%s\n%s\n", mkAccountLink(delegator) ,mkTranscationLink(events.TxHash[0],events.TransferAmount[j]))
+                                total = totaler(events.TransferAmount[j])
                             }
                         }
                     }
-                    msg += mkBold("\nFees paid by ")
-                    msg += mkAccountLink(events.WithdrawRewardsValidator[0]) + ": " + mkTranscationLink(events.TxHash[0], events.TransferAmount[0])
+                    msg += mkBold("\nTotal: ") +
+                        mkTranscationLink(events.TxHash[0],total) +  
+                        mkBold("\nFees paid by ") +
+                        mkAccountLink(events.WithdrawRewardsValidator[0]) +
+                        ": " +
+                        mkTranscationLink(events.TxHash[0], events.TransferAmount[0])
                     if memo := getMemo(events.TxHash[0]); memo != "" {
                         msg += mkBold("\nMemo: " + memo)
                     }
