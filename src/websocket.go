@@ -151,7 +151,7 @@ func Connect(resp chan string, restart chan bool) {
                     }
                     msg += mkBold("\nTotal: ") +
                         mkTranscationLink(events.TxHash[0],total) +  
-                        mkBold("\nFees paid by Validator:\n") +
+                        mkBold("\n\nFees paid by Validator:\n") +
                         mkTranscationLink(events.TxHash[0], events.TransferAmount[0])
                     if memo := getMemo(events.TxHash[0]); memo != "" {
                         msg += mkBold("\n\nMemo: " + memo)
