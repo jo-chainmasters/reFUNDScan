@@ -144,16 +144,14 @@ func Connect(resp chan string, restart chan bool) {
                         if i >= 2 {
                             if i % 2 == 0 {
                                 j += 1
-                                msg += fmt.Sprintf("\n%s\n%s\n", mkAccountLink(delegator) ,mkTranscationLink(events.TxHash[0],events.TransferAmount[j]))
+                                msg += fmt.Sprintf("\n%s\n%s\n", mkAccountLink(delegator) ,denomToAmount(events.TransferAmount[j]))
                                 total = totaler(events.TransferAmount[j])
                             }
                         }
                     }
                     msg += mkBold("\nTotal: ") +
                         mkTranscationLink(events.TxHash[0],total) +  
-                        mkBold("\nFees paid by ") +
-                        mkAccountLink(events.WithdrawRewardsValidator[0]) +
-                        ": " +
+                        mkBold("\nFees paid by Validator:\n") +
                         mkTranscationLink(events.TxHash[0], events.TransferAmount[0])
                     if memo := getMemo(events.TxHash[0]); memo != "" {
                         msg += mkBold("\nMemo: " + memo)
