@@ -134,11 +134,11 @@ func Connect(resp chan string, restart chan bool) {
                     // REStake Transactions
                     msg := "‎" +
                         mkBold("\n♻️ REStake ♻️") +
-                        mkBold("\n\nValidator: ") +
+                        mkBold("\n\nValidator: \n") +
                         mkAccountLink(events.WithdrawRewardsValidator[0]) +
-                        mkBold("\nDelegators: \n")
+                        mkBold("\nDelegators:")
                     j := 0
-                    total := ""
+                    var total string
                     totaler := denomsToAmount()
                     for i, delegator := range events.MessageSender {
                         if i >= 2 {
@@ -149,10 +149,7 @@ func Connect(resp chan string, restart chan bool) {
                             }
                         }
                     }
-                    msg += mkBold("\nTotal: ") +
-                        mkTranscationLink(events.TxHash[0],total) +  
-                        mkBold("\n\nFees paid by Validator:\n") +
-                        mkTranscationLink(events.TxHash[0], events.TransferAmount[0])
+                    msg += mkBold("\nTotal REStaked: \n") + mkTranscationLink(events.TxHash[0],total) 
                     if memo := getMemo(events.TxHash[0]); memo != "" {
                         msg += mkBold("\n\nMemo: " + memo)
                     }
