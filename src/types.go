@@ -40,6 +40,9 @@ type WebsocketResponse struct {
             TransferAmount []string `json:"transfer.amount"`
             TxHash []string `json:"tx.hash"`
             WithdrawRewardsValidator []string `json:"withdraw_rewards.validator"`
+            WithdrawRewardsDelegator []string `json:"withdraw_rewards.delegator"`
+            WithdrawRewardsAmount []string `json:"withdraw_rewards.amount"`
+            WithdrawCommissionAmount []string `json:"withdraw_commission.amount"`
             MessageSender []string `json:"message.sender"`
             DelegateAmount []string `json:"delegate.amount"`
             DelegateValidator []string `json:"delegate.validator"`

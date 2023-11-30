@@ -84,6 +84,38 @@ func Connect(resp chan string, restart chan bool) {
                     }
                     msg += "\n‎"
                     resp <- msg 
+                case "/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward":
+                    msg := "‎" +
+                        mkBold("\n🪙 Withdraw Reward 🪙") +
+                        mkBold("\nDelegator: ") +
+                        mkAccountLink(events.WithdrawRewardsDelegator[0]) +
+                        mkBold("\nValidators: ")
+                    totaler := denomsToAmount()
+                    var total string
+                    for i, val := range events.WithdrawRewardsValidator{
+                        msg += fmt.Sprintf("\n%s: %s",mkAccountLink(val), mkTransactionLink(events.TxHash[0],events.WithdrawRewardsAmount[i]))
+                        total = totaler(events.WithdrawRewardsAmount[i])
+                    }
+                    msg += "\nTotal: " + total
+                    if memo := getMemo(events.TxHash[0]); memo != "" {
+                        msg += mkBold("\nMemo: " + memo)
+                    }
+                    msg += "\n‎"
+                    resp <- msg 
+
+                case "/cosmos.distribution.v1beta1.MsgWithdrawValidatorCommission":
+                    msg := "‎" +
+                        mkBold("\n🪙 Withdraw Commission 🪙") +
+                        mkBold("\nValidator: ") +
+                        mkAccountLink(events.WithdrawRewardsDelegator[0]) +
+                        mkBold("\nAmount: ") +
+                        mkTranscationLink(events.TxHash[0],events.WithdrawCommissionAmount[0])
+                    }
+                    if memo := getMemo(events.TxHash[0]); memo != "" {
+                        msg += mkBold("\nMemo: " + memo)
+                    }
+                    msg += "\n‎"
+                    resp <- msg 
                 case "/cosmos.staking.v1beta1.MsgDelegate":
                     // Delegations
                     msg := "‎" +
