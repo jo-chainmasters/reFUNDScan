@@ -47,13 +47,14 @@ func Connect(resp chan string, restart chan bool) {
                 break
             }
             events := res.Result.Events
-            if len(events.MessageAction) >= 1 {
+            for _, ev := range events.MessageAction {
                 // TODO: Add rewards withdrawal, commission withdrawal,
                 // governance votes, validator creations, validator edits 
 
                 // Fix small amounts displaying as 0.00
-
-                if events.MessageAction[0] == "/cosmos.bank.v1beta1.MsgSend" {
+                switch ev {
+                    
+                case "/cosmos.bank.v1beta1.MsgSend":
                     // On Chain Transfers
                     msg := "‎" +
                         mkBold("\n📬 Transfer 📬") +
@@ -68,7 +69,7 @@ func Connect(resp chan string, restart chan bool) {
                     }
                     msg += "\n‎"
                     resp <- msg 
-                } else if res.Result.Events.MessageAction[0] == "/ibc.applications.transfer.v1.MsgTransfer" {
+                case "/ibc.applications.transfer.v1.MsgTransfer":
                     // FUND > Other Chain IBC
                     msg := "‎" +
                         mkBold("\n⚛️ IBC Transfer ⚛️") + 
@@ -83,7 +84,7 @@ func Connect(resp chan string, restart chan bool) {
                     }
                     msg += "\n‎"
                     resp <- msg 
-                } else if res.Result.Events.MessageAction[0] == "/cosmos.staking.v1beta1.MsgDelegate" {
+                case "/cosmos.staking.v1beta1.MsgDelegate":
                     // Delegations
                     msg := "‎" +
                         mkBold("\n❤️ Delegate ❤️") + 
@@ -98,7 +99,7 @@ func Connect(resp chan string, restart chan bool) {
                     }
                     msg += "\n‎"
                     resp <- msg 
-                } else if res.Result.Events.MessageAction[0] == "/cosmos.staking.v1beta1.MsgUndelegate" {
+                case "/cosmos.staking.v1beta1.MsgUndelegate":
                     // Undelegations
                     msg := "‎" +
                         mkBold("\n💀 Undelegate 💀") + 
@@ -113,7 +114,7 @@ func Connect(resp chan string, restart chan bool) {
                     }
                     msg += "\n‎"
                     resp <- msg 
-                } else if res.Result.Events.MessageAction[0] == "/cosmos.staking.v1beta1.MsgBeginRedelegate" {
+                case "/cosmos.staking.v1beta1.MsgBeginRedelegate":
                     // Redelegations
                     msg := "‎" +
                         mkBold("\n💞 Redelegate 💞") + 
@@ -130,7 +131,7 @@ func Connect(resp chan string, restart chan bool) {
                     }
                     msg += "\n‎"
                     resp <- msg 
-                } else if events.MessageAction[0] == "/cosmos.authz.v1beta1.MsgExec" {
+                case "/cosmos.authz.v1beta1.MsgExec":
                     // REStake Transactions
                     msg := "‎" +
                         mkBold("\n♻️ REStake ♻️") +
@@ -155,26 +156,24 @@ func Connect(resp chan string, restart chan bool) {
                     }
                     msg += "\n‎"
                     resp <- msg 
-                } else if len(events.MessageAction) >= 2 {
+                case "/ibc.core.channel.v1.MsgRecvPacket":
                     // Other Chain > FUND IBC
-                    if events.MessageAction[1] == "/ibc.core.channel.v1.MsgRecvPacket" {
-                        msg := "‎" +
-                            mkBold("\n⚛️ IBC Transfer ⚛️") +
-                            mkBold("\n\nSender: ") +
-                            mkAccountLink(events.IBCForeignSender[0]) +
-                            mkBold("\nReciever: ") +
-                            mkAccountLink(events.TransferRecipient[1]) +
-                            mkBold("\nAmount: ") +
-                            mkTranscationLink(events.TxHash[0],events.TransferAmount[1])
-                        if memo := getMemo(events.TxHash[0]); memo != "" {
-                            msg += mkBold("\nMemo: " + memo)
-                        }
-                        msg += "\n‎"
-                        resp <- msg 
+                    msg := "‎" +
+                        mkBold("\n⚛️ IBC Transfer ⚛️") +
+                        mkBold("\n\nSender: ") +
+                        mkAccountLink(events.IBCForeignSender[0]) +
+                        mkBold("\nReciever: ") +
+                        mkAccountLink(events.TransferRecipient[1]) +
+                        mkBold("\nAmount: ") +
+                        mkTranscationLink(events.TxHash[0],events.TransferAmount[1])
+                    if memo := getMemo(events.TxHash[0]); memo != "" {
+                        msg += mkBold("\nMemo: " + memo)
                     }
+                    msg += "\n‎"
+                    resp <- msg 
                 }
             }
-        }  
+        }
     }()
     select {
     case <- done:
