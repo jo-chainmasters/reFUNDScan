@@ -87,18 +87,18 @@ func Connect(resp chan string, restart chan bool) {
                 case "/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward":
                     msg := "‎" +
                         mkBold("\n🪙 Withdraw Reward 🪙") +
-                        mkBold("\n\nDelegator: ") +
+                        mkBold("\n\nDelegator: \n") +
                         mkAccountLink(events.WithdrawRewardsDelegator[0]) +
-                        mkBold("\nValidators: ")
+                        mkBold("\n\nValidators: ")
                     totaler := denomsToAmount()
                     var total string
                     for i, val := range events.WithdrawRewardsValidator{
-                        msg += fmt.Sprintf("\n%s -> %s",mkAccountLink(val), denomToAmount(events.WithdrawRewardsAmount[i]))
+                        msg += fmt.Sprintf("\n%s:\n%s",mkAccountLink(val), denomToAmount(events.WithdrawRewardsAmount[i]))
                         total = totaler(events.WithdrawRewardsAmount[i])
                     }
-                    msg += mkBold("\n\nTotal: ") + mkTranscationLink(events.TxHash[0],total)
+                    msg += mkBold("\n\nTotal: \n") + mkTranscationLink(events.TxHash[0],total)
                     if memo := getMemo(events.TxHash[0]); memo != "" {
-                        msg += mkBold("\n\nMemo: " + memo)
+                        msg += mkBold("\nMemo: " + memo)
                     }
                     msg += "\n‎"
                     resp <- msg 
@@ -151,7 +151,7 @@ func Connect(resp chan string, restart chan bool) {
                         mkBold("\n💞 Redelegate 💞") + 
                         mkBold("\n\nValidators: ") +
                         mkAccountLink(events.RedelegateSourceValidator[0]) +
-                        mkBold(" 👉 ") +
+                        mkBold(" -> ") +
                         mkAccountLink(events.RedelegateDestinationValidator[0]) +
                         mkBold("\nDelegator: ") +
                         mkAccountLink(events.MessageSender[0]) +
