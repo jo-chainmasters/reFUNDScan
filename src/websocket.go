@@ -93,10 +93,10 @@ func Connect(resp chan string, restart chan bool) {
                     totaler := denomsToAmount()
                     var total string
                     for i, val := range events.WithdrawRewardsValidator{
-                        msg += fmt.Sprintf("\n%s: %s",mkAccountLink(val), mkTranscationLink(events.TxHash[0],events.WithdrawRewardsAmount[i]))
+                        msg += fmt.Sprintf("\n%s -> %s",mkAccountLink(val), mkTranscationLink(events.TxHash[0],events.WithdrawRewardsAmount[i]))
                         total = totaler(events.WithdrawRewardsAmount[i])
                     }
-                    msg += "\nTotal: " + total
+                    msg += "\nTotal: " + mkTranscationLink(events.TxHash[0],total)
                     if memo := getMemo(events.TxHash[0]); memo != "" {
                         msg += mkBold("\nMemo: " + memo)
                     }
