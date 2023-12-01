@@ -96,9 +96,9 @@ func Connect(resp chan string, restart chan bool) {
                         msg += fmt.Sprintf("\n%s -> %s",mkAccountLink(val), mkTranscationLink(events.TxHash[0],events.WithdrawRewardsAmount[i]))
                         total = totaler(events.WithdrawRewardsAmount[i])
                     }
-                    msg += "\nTotal: " + mkTranscationLink(events.TxHash[0],total)
+                    msg += "\n\nTotal: " + mkTranscationLink(events.TxHash[0],total)
                     if memo := getMemo(events.TxHash[0]); memo != "" {
-                        msg += mkBold("\nMemo: " + memo)
+                        msg += mkBold("\n\nMemo: " + memo)
                     }
                     msg += "\n‎"
                     resp <- msg 
