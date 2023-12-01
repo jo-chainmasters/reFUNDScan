@@ -93,7 +93,7 @@ func Connect(resp chan string, restart chan bool) {
                     totaler := denomsToAmount()
                     var total string
                     for i, val := range events.WithdrawRewardsValidator{
-                        msg += fmt.Sprintf("\n%s -> %s",mkAccountLink(val), mkTranscationLink(events.TxHash[0],events.WithdrawRewardsAmount[i]))
+                        msg += fmt.Sprintf("\n%s -> %s",mkAccountLink(val), denomToAmount(events.WithdrawRewardsAmount[i]))
                         total = totaler(events.WithdrawRewardsAmount[i])
                     }
                     msg += "\n\nTotal: " + mkTranscationLink(events.TxHash[0],total)
