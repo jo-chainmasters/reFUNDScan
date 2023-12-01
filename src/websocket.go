@@ -87,7 +87,7 @@ func Connect(resp chan string, restart chan bool) {
                 case "/cosmos.distribution.v1beta1.MsgWithdrawDelegatorReward":
                     msg := "‎" +
                         mkBold("\n🪙 Withdraw Reward 🪙") +
-                        mkBold("\nDelegator: ") +
+                        mkBold("\n\nDelegator: ") +
                         mkAccountLink(events.WithdrawRewardsDelegator[0]) +
                         mkBold("\nValidators: ")
                     totaler := denomsToAmount()
